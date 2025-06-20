@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заметки ЛСПК - Профиль</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        body {
+            background-image: url('file:///E:/флешка%20(аня)/И3Б/ПП/!!!!!!!!!!точно%20готовый%20продукт/1/ПАТТЕРН%20ДЛЯ%20ФОНА.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            color: #f8f9fa;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(18, 18, 18, 0.85);
+            z-index: -1;
+        }
+        
+        /* Стили для светлой темы */
+        body.light-theme {
+            color: #212529;
+        }
+        
+        .light-theme::before {
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+        
+        .light-theme .card {
+            background-color: #ffffff;
+            border-color: #dee2e6;
+        }
+        
+        .light-theme .form-control,
+        .light-theme .form-select {
+            background-color: #ffffff;
+            color: #212529 !important;
+            border-color: #ced4da;
+        }
+        
+        .light-theme .form-label {
+            color: #212529 !important;
+        }
+        
+        .light-theme .nav-tabs .nav-link.active {
+            background-color: #ffffff;
+            color: #212529;
+            border-color: #dee2e6 #dee2e6 #ffffff;
+        }
+        
+        .light-theme .nav-tabs .nav-link:not(.active) {
+            color: #6c757d;
+        }
+        
+        .light-theme a {
+            color: #0d6efd;
+        }
+        
+        .light-theme .text-muted {
+            color: #6c757d !important;
+        }
+
+        /* Стили для навигации в светлой теме */
+        .light-theme .navbar {
+            background-color: #0d6efd !important;
+        }
+        
+        .light-theme .navbar-brand,
+        .light-theme .nav-link.active,
+        .light-theme .nav-link {
+            color: #ffffff !important;
+        }
+        
+        .light-theme .navbar-brand:hover,
+        .light-theme .nav-link:hover {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        
+        .light-theme .btn-outline-light {
+            color: #ffffff;
+            border-color: #ffffff;
+        }
+        
+        .light-theme .btn-outline-light:hover {
+            color: #0d6efd;
+            background-color: #ffffff;
+        }
+        
+        /* Общие стили для темной темы (по умолчанию) */
+        .card {
+            background-color: #1e1e1e;
+            border-color: #333;
+        }
+        
+        .form-control,
+        .form-select {
+            background-color: #2d2d2d;
+            color: #ffffff !important;
+            border-color: #444;
+        }
+        
+        /* Специально для placeholder */
+        .form-control::placeholder {
+            color: #adb5bd !important;
+            opacity: 1;
+        }
+        
+        .form-label {
+            color: #ffffff !important;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            border-color: #444 #444 #2d2d2d;
+        }
+        
+        .nav-tabs .nav-link:not(.active) {
+            color: #adb5bd;
+        }
+        
+        a {
+            color: #4da6ff;
+        }
+        
+        .text-muted {
+            color: #adb5bd !important;
+        }
+        
+        /* Стили для подвала */
+        footer {
+            padding: 1.5rem 0;
+            background-color: rgba(18, 18, 18, 0.7);
+            border-radius: 10px;
+            margin-top: 2rem;
+            backdrop-filter: blur(5px);
+        }
+        
+        .light-theme footer {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Адаптация для мобильных устройств */
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            
+            .navbar-brand img {
+                height: 24px;
+            }
+            
+            .btn {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.875rem;
+            }
+        }
+        
+        /* Стили для кнопок навигации */
+        .nav-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-buttons .btn {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Специфичные стили для профиля */
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #4da6ff;
+            margin-bottom: 20px;
+        }
+        
+        .stats-card {
+            transition: transform 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .notes-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .notes-table th, .notes-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #444;
+            text-align: left;
+        }
+        
+        .light-theme .notes-table th, 
+        .light-theme .notes-table td {
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .export-option {
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        
+        .export-option:hover {
+            background-color: rgba(77, 166, 255, 0.1);
+        }
+        
+        .light-theme .export-option:hover {
+            background-color: rgba(13, 110, 253, 0.1);
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="file:///D:/флешка%20(аня)/И3Б/ПП/!!!!!!!!!!точно%20готовый%20продукт/1/ЛОГО.png" alt="Логотип ЛСПК" height="30" class="d-inline-block align-top me-2">
+                Заметки ЛСПК
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="notes.html">Мои заметки</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="edit-note.html">Новая заметка</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="profile.html">Профиль</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="notes.html">
+                            <i class="bi bi-journal me-1"></i> Заметки
+                        </a>
+                    </li>
+                </ul>
+                <button id="themeToggleNav" class="btn btn-sm btn-outline-light ms-3">
+                    <i class="bi bi-moon-fill"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="text-center mb-5">
+                    <img src="https://ui-avatars.com/api/?name=Иван+Иванов&background=4da6ff&color=fff&size=128" alt="Аватар" class="profile-avatar">
+                    <h2 class="mb-1">Иван Иванов</h2>
+                    <p class="text-muted">Студент ЛСПК | Группа И3Б</p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <button class="btn btn-outline-primary" id="editProfileBtn">
+                            <i class="bi bi-pencil me-1"></i> Редактировать
+                        </button>
+                        <button class="btn btn-outline-danger" id="logoutBtn">
+                            <i class="bi bi-box-arrow-right me-1"></i> Выйти
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-4 mb-3">
+                        <div class="card stats-card h-100">
+                            <div class="card-body text-center">
+                                <h1 class="display-4 text-primary">42</h1>
+                                <h5 class="card-title">Заметок</h5>
+                                <p class="card-text text-muted">Всего создано</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card stats-card h-100">
+                            <div class="card-body text-center">
+                                <h1 class="display-4 text-success">36</h1>
+                                <h5 class="card-title">Активных</h5>
+                                <p class="card-text text-muted">В работе</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card stats-card h-100">
+                            <div class="card-body text-center">
+                                <h1 class="display-4 text-warning">6</h1>
+                                <h5 class="card-title">Завершено</h5>
+                                <p class="card-text text-muted">Завершённые задачи</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs" id="profileTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab">Личные данные</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes" type="button" role="tab">Мои заметки</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="export-tab" data-bs-toggle="tab" data-bs-target="#export" type="button" role="tab">Экспорт</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content" id="profileTabsContent">
+                            <!-- Личные данные -->
+                            <div class="tab-pane fade show active" id="info" role="tabpanel">
+                                <form id="profileForm">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="firstName" class="form-label">Имя</label>
+                                            <input type="text" class="form-control" id="firstName" value="Иван">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="lastName" class="form-label">Фамилия</label>
+                                            <input type="text" class="form-control" id="lastName" value="Иванов">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" value="ivan.ivanov@lspk.ru">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="group" class="form-label">Группа</label>
+                                        <input type="text" class="form-control" id="group" value="И3Б">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="about" class="form-label">О себе</label>
+                                        <textarea class="form-control" id="about" rows="3">Студент ЛСПК, учусь на программиста. Люблю создавать полезные приложения.</textarea>
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary" id="saveProfileBtn">
+                                            <i class="bi bi-save me-1"></i> Сохранить изменения
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <!-- Мои заметки -->
+                            <div class="tab-pane fade" id="notes" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="notes-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Заголовок</th>
+                                                <th>Категория</th>
+                                                <th>Дата создания</th>
+                                                <th>Статус</th>
+                                                <th>Действия</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Конспект по программированию</td>
+                                                <td><span class="badge bg-primary">Учеба</span></td>
+                                                <td>15.06.2025</td>
+                                                <td><span class="badge bg-success">Активна</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-danger">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Задачи на лето</td>
+                                                <td><span class="badge bg-info">Личные</span></td>
+                                                <td>10.06.2025</td>
+                                                <td><span class="badge bg-success">Активна</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-danger">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Идеи для проекта</td>
+                                                <td><span class="badge bg-warning">Работа</span></td>
+                                                <td>05.06.2025</td>
+                                                <td><span class="badge bg-secondary">Завершено</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-danger">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Рецепты</td>
+                                                <td><span class="badge bg-success">Другое</span></td>
+                                                <td>01.06.2025</td>
+                                                <td><span class="badge bg-success">Активна</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-danger">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="d-flex justify-content-between mt-3">
+                                    <div>
+                                        <button class="btn btn-outline-primary">
+                                            <i class="bi bi-plus-circle me-1"></i> Новая заметка
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-outline-secondary">
+                                            <i class="bi bi-arrow-repeat me-1"></i> Обновить
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Экспорт -->
+                            <div class="tab-pane fade" id="export" role="tabpanel">
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle me-2"></i> Вы можете экспортировать все ваши заметки в различных форматах для резервного копирования или использования в других программах.
+                                </div>
+                                
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <div class="card mb-3">
+                                            <div class="card-header bg-primary text-white">
+                                                <i class="bi bi-file-earmark-arrow-down me-2"></i> Экспорт в файл
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="export-option mb-3" data-format="markdown">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-file-earmark-text fs-3 me-3 text-primary"></i>
+                                                        <div>
+                                                            <h5 class="mb-0">Markdown (.md)</h5>
+                                                            <p class="mb-0 text-muted">Формат для технических документов</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="export-option mb-3" data-format="pdf">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-file-earmark-pdf fs-3 me-3 text-danger"></i>
+                                                        <div>
+                                                            <h5 class="mb-0">PDF</h5>
+                                                            <p class="mb-0 text-muted">Универсальный формат для печати</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="export-option" data-format="html">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-file-earmark-code fs-3 me-3 text-success"></i>
+                                                        <div>
+                                                            <h5 class="mb-0">HTML</h5>
+                                                            <p class="mb-0 text-muted">Формат для веб-страниц</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-header bg-success text-white">
+                                                <i class="bi bi-cloud-arrow-down me-2"></i> Экспорт в ZIP-архив
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="card-text">Создайте архив со всеми заметками в выбранном формате:</p>
+                                                
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="includeImages" checked>
+                                                    <label class="form-check-label" for="includeImages">
+                                                        Включить изображения
+                                                    </label>
+                                                </div>
+                                                
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="includeMetadata" checked>
+                                                    <label class="form-check-label" for="includeMetadata">
+                                                        Включить метаданные (категории, теги)
+                                                    </label>
+                                                </div>
+                                                
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="includeDates" checked>
+                                                    <label class="form-check-label" for="includeDates">
+                                                        Включить даты создания
+                                                    </label>
+                                                </div>
+                                                
+                                                <div class="d-grid mt-3">
+                                                    <button class="btn btn-success" id="exportZipBtn">
+                                                        <i class="bi bi-file-zip me-1"></i> Создать ZIP-архив
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="bi bi-clock-history me-2"></i> История экспорта
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <div>
+                                                <i class="bi bi-file-earmark-text me-2 text-primary"></i>
+                                                <span>Экспорт в Markdown</span>
+                                            </div>
+                                            <div class="text-muted">20.06.2025 14:30</div>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <i class="bi bi-file-zip me-2 text-success"></i>
+                                                <span>Полный архив заметок</span>
+                                            </div>
+                                            <div class="text-muted">15.06.2025 10:15</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-5">
+        <div class="container text-center text-muted">
+            <p class="mb-0">ГАПОУ КК ЛСПК &copy; 2025</p>
+        </div>
+    </footer>
+
+    <!-- Модальное окно изменения аватара -->
+    <div class="modal fade" id="avatarModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Изменение аватара</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <img src="https://ui-avatars.com/api/?name=Иван+Иванов&background=4da6ff&color=fff&size=128" alt="Текущий аватар" class="profile-avatar mb-3" id="currentAvatar">
+                        <div class="mb-3">
+                            <input type="file" class="form-control" id="avatarUpload">
+                        </div>
+                        <p class="text-muted small">Рекомендуемый размер: 200×200 пикселей</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" id="saveAvatarBtn">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Кнопки навигации -->
+    <div class="nav-buttons">
+        <div class="btn-group" role="group">
+            <button class="btn btn-secondary" onclick="window.history.back()" title="Назад">
+                <i class="bi bi-arrow-left"></i>
+            </button>
+            <button class="btn btn-secondary" onclick="window.history.forward()" title="Вперед">
+                <i class="bi bi-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Функция для переключения темы
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggleNav');
+            
+            body.classList.toggle('light-theme');
+            body.classList.toggle('dark-theme');
+            
+            if (body.classList.contains('light-theme')) {
+                themeToggle.innerHTML = '<i class="bi bi-moon-fill"></i>';
+                localStorage.setItem('theme', 'light');
+            } else {
+                themeToggle.innerHTML = '<i class="bi bi-sun-fill"></i>';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // Проверка сохраненной темы при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeToggle = document.getElementById('themeToggleNav');
+            
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+                document.body.classList.remove('dark-theme');
+                themeToggle.innerHTML = '<i class="bi bi-moon-fill"></i>';
+            } else {
+                themeToggle.innerHTML = '<i class="bi bi-sun-fill"></i>';
+            }
+            
+            // Обработчик клика для переключения темы
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Обработчик формы профиля
+            document.getElementById('profileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Сохраняем изменения профиля
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const email = document.getElementById('email').value;
+                const group = document.getElementById('group').value;
+                const about = document.getElementById('about').value;
+                
+                // Обновляем имя в заголовке
+                document.querySelector('.profile-avatar').alt = `${firstName} ${lastName}`;
+                document.querySelector('h2.mb-1').textContent = `${firstName} ${lastName}`;
+                
+                // Обновляем аватар с новым именем
+                document.querySelector('.profile-avatar').src = `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=4da6ff&color=fff&size=128`;
+                
+                // Показываем уведомление об успешном сохранении
+                showAlert('Данные профиля успешно сохранены!', 'success');
+            });
+            
+            // Обработчик кнопки редактирования профиля
+            document.getElementById('editProfileBtn').addEventListener('click', function() {
+                const avatarModal = new bootstrap.Modal(document.getElementById('avatarModal'));
+                avatarModal.show();
+            });
+            
+            // Обработчик кнопки выхода
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                if (confirm('Вы уверены, что хотите выйти из системы?')) {
+                    // Перенаправляем на страницу входа
+                    window.location.href = 'index.html';
+                }
+            });
+            
+            // Обработчик загрузки аватара
+            document.getElementById('saveAvatarBtn').addEventListener('click', function() {
+                const fileInput = document.getElementById('avatarUpload');
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        // Обновляем аватар
+                        document.querySelector('.profile-avatar').src = e.target.result;
+                        document.getElementById('currentAvatar').src = e.target.result;
+                        
+                        // Закрываем модальное окно
+                        const avatarModal = bootstrap.Modal.getInstance(document.getElementById('avatarModal'));
+                        avatarModal.hide();
+                        
+                        showAlert('Аватар успешно обновлен!', 'success');
+                    };
+                    
+                    reader.readAsDataURL(file);
+                } else {
+                    alert('Пожалуйста, выберите файл для загрузки');
+                }
+            });
+            
+            // Обработчики экспорта заметок
+            document.querySelectorAll('.export-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const format = this.getAttribute('data-format');
+                    exportNotes(format);
+                });
+            });
+            
+            // Обработчик экспорта в ZIP
+            document.getElementById('exportZipBtn').addEventListener('click', function() {
+                exportToZip();
+            });
+        });
+        
+        // Функция показа уведомления
+        function showAlert(message, type) {
+            // Создаем элемент уведомления
+            const alertElement = document.createElement('div');
+            alertElement.className = `alert alert-${type} alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3`;
+            alertElement.style.zIndex = '1100';
+            alertElement.style.width = '90%';
+            alertElement.style.maxWidth = '600px';
+            alertElement.role = 'alert';
+            alertElement.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            // Добавляем на страницу
+            document.body.appendChild(alertElement);
+            
+            // Автоматическое скрытие через 3 секунды
+            setTimeout(() => {
+                const alert = bootstrap.Alert.getOrCreateInstance(alertElement);
+                alert.close();
+            }, 3000);
+        }
+        
+        // Функция экспорта заметок
+        function exportNotes(format) {
+            let message = '';
+            switch(format) {
+                case 'markdown':
+                    message = 'Заметки экспортированы в формате Markdown';
+                    break;
+                case 'pdf':
+                    message = 'Заметки экспортированы в формате PDF';
+                    break;
+                case 'html':
+                    message = 'Заметки экспортированы в формате HTML';
+                    break;
+            }
+            
+            // Имитируем экспорт
+            setTimeout(() => {
+                showAlert(message, 'success');
+                
+                // Добавляем запись в историю экспорта
+                const historyContainer = document.querySelector('#export .card-body');
+                const newEntry = document.createElement('div');
+                newEntry.className = 'd-flex justify-content-between mb-3';
+                newEntry.innerHTML = `
+                    <div>
+                        <i class="bi bi-file-earmark-${format === 'pdf' ? 'pdf text-danger' : format === 'html' ? 'code text-success' : 'text text-primary'} me-2"></i>
+                        <span>Экспорт в ${format === 'markdown' ? 'Markdown' : format === 'pdf' ? 'PDF' : 'HTML'}</span>
+                    </div>
+                    <div class="text-muted">${new Date().toLocaleDateString('ru-RU')} ${new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'})}</div>
+                `;
+                
+                historyContainer.insertBefore(newEntry, historyContainer.firstChild);
+            }, 1000);
+        }
+        
+        // Функция экспорта в ZIP
+        function exportToZip() {
+            // Показываем индикатор загрузки
+            const exportBtn = document.getElementById('exportZipBtn');
+            const originalText = exportBtn.innerHTML;
+            exportBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Создание архива...';
+            exportBtn.disabled = true;
+            
+            // Имитируем процесс создания архива
+            setTimeout(() => {
+                // Возвращаем кнопку в исходное состояние
+                exportBtn.innerHTML = originalText;
+                exportBtn.disabled = false;
+                
+                // Показываем уведомление
+                showAlert('ZIP-архив со всеми заметками успешно создан!', 'success');
+                
+                // Добавляем запись в историю экспорта
+                const historyContainer = document.querySelector('#export .card-body');
+                const newEntry = document.createElement('div');
+                newEntry.className = 'd-flex justify-content-between mb-3';
+                newEntry.innerHTML = `
+                    <div>
+                        <i class="bi bi-file-zip me-2 text-success"></i>
+                        <span>Полный архив заметок</span>
+                    </div>
+                    <div class="text-muted">${new Date().toLocaleDateString('ru-RU')} ${new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'})}</div>
+                `;
+                
+                historyContainer.insertBefore(newEntry, historyContainer.firstChild);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

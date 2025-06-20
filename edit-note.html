@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заметки ЛСПК - Редактирование</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            background-image: url('file:///E:/флешка%20(аня)/И3Б/ПП/!!!!!!!!!!точно%20готовый%20продукт/1/ПАТТЕРН%20ДЛЯ%20ФОНА.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            color: #f8f9fa;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(18, 18, 18, 0.85);
+            z-index: -1;
+        }
+        
+        /* Стили для светлой темы */
+        body.light-theme {
+            color: #212529;
+        }
+        
+        .light-theme::before {
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+        
+        .light-theme .card {
+            background-color: #ffffff;
+            border-color: #dee2e6;
+        }
+        
+        .light-theme .form-control,
+        .light-theme .form-select {
+            background-color: #ffffff;
+            color: #212529 !important;
+            border-color: #ced4da;
+        }
+        
+        .light-theme .form-label {
+            color: #212529 !important;
+        }
+        
+        .light-theme .nav-tabs .nav-link.active {
+            background-color: #ffffff;
+            color: #212529;
+            border-color: #dee2e6 #dee2e6 #ffffff;
+        }
+        
+        .light-theme .nav-tabs .nav-link:not(.active) {
+            color: #6c757d;
+        }
+        
+        .light-theme a {
+            color: #0d6efd;
+        }
+        
+        .light-theme .text-muted {
+            color: #6c757d !important;
+        }
+
+        /* Стили для навигации в светлой теме */
+        .light-theme .navbar {
+            background-color: #0d6efd !important;
+        }
+        
+        .light-theme .navbar-brand,
+        .light-theme .nav-link.active,
+        .light-theme .nav-link {
+            color: #ffffff !important;
+        }
+        
+        .light-theme .navbar-brand:hover,
+        .light-theme .nav-link:hover {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        
+        .light-theme .btn-outline-light {
+            color: #ffffff;
+            border-color: #ffffff;
+        }
+        
+        .light-theme .btn-outline-light:hover {
+            color: #0d6efd;
+            background-color: #ffffff;
+        }
+        
+        /* Общие стили для темной темы (по умолчанию) */
+        .card {
+            background-color: #1e1e1e;
+            border-color: #333;
+        }
+        
+        .form-control,
+        .form-select {
+            background-color: #2d2d2d;
+            color: #ffffff !important;
+            border-color: #444;
+        }
+        
+        /* Специально для placeholder */
+        .form-control::placeholder {
+            color: #adb5bd !important;
+            opacity: 1;
+        }
+        
+        .form-label {
+            color: #ffffff !important;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            border-color: #444 #444 #2d2d2d;
+        }
+        
+        .nav-tabs .nav-link:not(.active) {
+            color: #adb5bd;
+        }
+        
+        a {
+            color: #4da6ff;
+        }
+        
+        .text-muted {
+            color: #adb5bd !important;
+        }
+        
+        /* Стили для редактора */
+        .editor-container {
+            background-color: #1e1e1e;
+            border-radius: 0.25rem;
+            overflow: hidden;
+        }
+        
+        .light-theme .editor-container {
+            background-color: #ffffff;
+        }
+        
+        /* Стили для подвала */
+        footer {
+            padding: 1.5rem 0;
+            background-color: rgba(18, 18, 18, 0.7);
+            border-radius: 10px;
+            margin-top: 2rem;
+            backdrop-filter: blur(5px);
+        }
+        
+        .light-theme footer {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Адаптация для мобильных устройств */
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            
+            .navbar-brand img {
+                height: 24px;
+            }
+            
+            .btn {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.875rem;
+            }
+        }
+        
+        /* Стили для кнопок навигации */
+        .nav-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-buttons .btn {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="file:///D:/флешка%20(аня)/И3Б/ПП/!!!!!!!!!!точно%20готовый%20продукт/1/ЛОГО.png" alt="Логотип ЛСПК" height="30" class="d-inline-block align-top me-2">
+                Заметки ЛСПК
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="notes.html">Мои заметки</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="edit-note.html">Новая заметка</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="notes.html">
+                            <i class="bi bi-arrow-left me-1"></i> Назад к заметкам
+                        </a>
+                    </li>
+                </ul>
+                <button id="themeToggleNav" class="btn btn-sm btn-outline-light ms-3">
+                    <i class="bi bi-moon-fill"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 id="editPageTitle">Новая заметка</h2>
+                    <div>
+                        <button class="btn btn-outline-primary me-2" id="previewToggle">
+                            <i class="bi bi-eye-fill me-1"></i> Предпросмотр
+                        </button>
+                        <button class="btn btn-primary" id="saveNoteBtn">
+                            <i class="bi bi-save me-1"></i> Сохранить
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="noteTitle" class="form-label">Заголовок</label>
+                            <input type="text" class="form-control" id="noteTitle" placeholder="Введите заголовок">
+                        </div>
+                        <div class="mb-3">
+                            <label for="noteCategory" class="form-label">Категория</label>
+                            <select class="form-select" id="noteCategory">
+                                <option value="Учеба">Учеба</option>
+                                <option value="Личные">Личные</option>
+                                <option value="Работа">Работа</option>
+                                <option value="Другое">Другое</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="noteTags" class="form-label">Теги (разделяйте запятыми)</label>
+                            <input type="text" class="form-control" id="noteTags" placeholder="тег1, тег2, тег3">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div id="editorContainer" class="editor-container">
+                            <textarea id="noteContent" placeholder="Начните писать свою заметку здесь..."></textarea>
+                        </div>
+                        <div id="previewContainer" style="display: none; padding: 1.25rem;">
+                            <div id="notePreview"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3 d-flex justify-content-between">
+                    <div>
+                        <button class="btn btn-outline-danger" id="deleteNoteBtn" style="display: none;">
+                            <i class="bi bi-trash me-1"></i> Удалить
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn btn-outline-secondary me-2" id="exportNoteBtn">
+                            <i class="bi bi-download me-1"></i> Экспорт
+                        </button>
+                        <button class="btn btn-primary" id="saveNoteBtnBottom">
+                            <i class="bi bi-save me-1"></i> Сохранить
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-5 py-3 bg-light">
+        <div class="container text-center text-muted">
+            <p class="mb-0">ГАПОУ КК ЛСПК &copy; 2025</p>
+        </div>
+    </footer>
+
+    <!-- Модальное окно экспорта -->
+    <div class="modal fade" id="exportModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Экспорт заметки</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Формат</label>
+                        <select class="form-select" id="exportFormat">
+                            <option value="markdown">Markdown (.md)</option>
+                            <option value="plaintext">Текст (.txt)</option>
+                            <option value="html">HTML</option>
+                        </select>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="includeMetadata">
+                        <label class="form-check-label" for="includeMetadata">Включить метаданные (заголовок, категория, теги)</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" id="confirmExportBtn">Экспорт</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Кнопки навигации -->
+    <div class="nav-buttons">
+        <div class="btn-group" role="group">
+            <button class="btn btn-secondary" onclick="window.history.back()" title="Назад">
+                <i class="bi bi-arrow-left"></i>
+            </button>
+            <button class="btn btn-secondary" onclick="window.history.forward()" title="Вперед">
+                <i class="bi bi-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+    <script>
+        // Функция для переключения темы
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggleNav');
+            
+            body.classList.toggle('light-theme');
+            body.classList.toggle('dark-theme');
+            
+            if (body.classList.contains('light-theme')) {
+                themeToggle.innerHTML = '<i class="bi bi-moon-fill"></i>';
+                localStorage.setItem('theme', 'light');
+            } else {
+                themeToggle.innerHTML = '<i class="bi bi-sun-fill"></i>';
+                localStorage.setItem('theme', 'dark');
+            }
+            
+            // Обновляем редактор при смене темы
+            if (window.editor) {
+                setTimeout(() => {
+                    window.editor.codemirror.refresh();
+                }, 100);
+            }
+        }
+        
+        // Проверка сохраненной темы при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeToggle = document.getElementById('themeToggleNav');
+            
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+                document.body.classList.remove('dark-theme');
+                themeToggle.innerHTML = '<i class="bi bi-moon-fill"></i>';
+            } else {
+                themeToggle.innerHTML = '<i class="bi bi-sun-fill"></i>';
+            }
+            
+            // Обработчик клика для переключения темы
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Инициализация редактора EasyMDE
+            const editor = new EasyMDE({
+                element: document.getElementById('noteContent'),
+                spellChecker: false,
+                autosave: {
+                    enabled: false
+                },
+                placeholder: "Начните писать свою заметку здесь...",
+                sideBySideFullscreen: false,
+                toolbar: [
+                    "bold", "italic", "heading", "|",
+                    "quote", "unordered-list", "ordered-list", "|",
+                    "link", "image", "|",
+                    "preview", "side-by-side", "fullscreen", "|",
+                    "guide"
+                ]
+            });
+            window.editor = editor;
+            
+            // Обработчик переключения предпросмотра
+            document.getElementById('previewToggle').addEventListener('click', function() {
+                const previewContainer = document.getElementById('previewContainer');
+                const editorContainer = document.getElementById('editorContainer');
+                
+                if (previewContainer.style.display === 'none') {
+                    // Показываем предпросмотр
+                    previewContainer.style.display = 'block';
+                    editorContainer.style.display = 'none';
+                    document.getElementById('notePreview').innerHTML = marked.parse(editor.value());
+                    this.innerHTML = '<i class="bi bi-pencil-fill me-1"></i> Редактировать';
+                } else {
+                    // Показываем редактор
+                    previewContainer.style.display = 'none';
+                    editorContainer.style.display = 'block';
+                    this.innerHTML = '<i class="bi bi-eye-fill me-1"></i> Предпросмотр';
+                }
+            });
+            
+            // Проверяем, редактируем ли мы существующую заметку
+            const urlParams = new URLSearchParams(window.location.search);
+            const noteId = urlParams.get('id');
+            
+            if (noteId) {
+                // Загружаем заметку из localStorage
+                loadNote(noteId);
+                document.getElementById('editPageTitle').textContent = 'Редактирование заметки';
+                document.getElementById('deleteNoteBtn').style.display = 'block';
+            }
+            
+            // Обработчик сохранения заметки
+            document.getElementById('saveNoteBtn').addEventListener('click', saveNote);
+            document.getElementById('saveNoteBtnBottom').addEventListener('click', saveNote);
+            
+            // Обработчик удаления заметки
+            document.getElementById('deleteNoteBtn').addEventListener('click', deleteNote);
+            
+            // Обработчик экспорта заметки
+            document.getElementById('exportNoteBtn').addEventListener('click', function() {
+                const exportModal = new bootstrap.Modal(document.getElementById('exportModal'));
+                exportModal.show();
+            });
+            
+            document.getElementById('confirmExportBtn').addEventListener('click', exportNote);
+        });
+        
+        // Функция загрузки заметки
+        function loadNote(noteId) {
+            const notes = JSON.parse(localStorage.getItem('notes')) || [];
+            const note = notes.find(n => n.id === noteId);
+            
+            if (note) {
+                document.getElementById('noteTitle').value = note.title;
+                document.getElementById('noteCategory').value = note.category;
+                document.getElementById('noteTags').value = note.tags.join(', ');
+                window.editor.value(note.content);
+            } else {
+                alert('Заметка не найдена!');
+                window.location.href = 'notes.html';
+            }
+        }
+        
+        // Функция сохранения заметки
+        function saveNote() {
+            const title = document.getElementById('noteTitle').value.trim();
+            const category = document.getElementById('noteCategory').value;
+            const tags = document.getElementById('noteTags').value
+                .split(',')
+                .map(tag => tag.trim())
+                .filter(tag => tag.length > 0);
+            const content = window.editor.value();
+            
+            if (!title) {
+                alert('Пожалуйста, укажите заголовок заметки');
+                return;
+            }
+            
+            if (!content) {
+                alert('Пожалуйста, добавьте содержание заметки');
+                return;
+            }
+            
+            const notes = JSON.parse(localStorage.getItem('notes')) || [];
+            const urlParams = new URLSearchParams(window.location.search);
+            const noteId = urlParams.get('id');
+            
+            if (noteId) {
+                // Обновляем существующую заметку
+                const noteIndex = notes.findIndex(n => n.id === noteId);
+                if (noteIndex !== -1) {
+                    notes[noteIndex] = {
+                        id: noteId,
+                        title,
+                        category,
+                        tags,
+                        content,
+                        updatedAt: new Date().toISOString()
+                    };
+                }
+            } else {
+                // Создаем новую заметку
+                const newNote = {
+                    id: generateId(),
+                    title,
+                    category,
+                    tags,
+                    content,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+                notes.push(newNote);
+            }
+            
+            localStorage.setItem('notes', JSON.stringify(notes));
+            alert('Заметка сохранена!');
+            window.location.href = 'notes.html';
+        }
+        
+        // Функция удаления заметки
+        function deleteNote() {
+            if (confirm('Вы уверены, что хотите удалить эту заметку?')) {
+                const notes = JSON.parse(localStorage.getItem('notes')) || [];
+                const urlParams = new URLSearchParams(window.location.search);
+                const noteId = urlParams.get('id');
+                
+                const updatedNotes = notes.filter(n => n.id !== noteId);
+                localStorage.setItem('notes', JSON.stringify(updatedNotes));
+                
+                alert('Заметка удалена!');
+                window.location.href = 'notes.html';
+            }
+        }
+        
+        // Функция экспорта заметки
+        function exportNote() {
+            const title = document.getElementById('noteTitle').value.trim();
+            const category = document.getElementById('noteCategory').value;
+            const tags = document.getElementById('noteTags').value;
+            const content = window.editor.value();
+            const format = document.getElementById('exportFormat').value;
+            const includeMetadata = document.getElementById('includeMetadata').checked;
+            
+            let exportContent = '';
+            
+            if (includeMetadata) {
+                exportContent += `# ${title}\n\n`;
+                exportContent += `**Категория:** ${category}\n`;
+                exportContent += `**Теги:** ${tags}\n\n`;
+            }
+            
+            exportContent += content;
+            
+            let mimeType, fileExtension;
+            
+            switch (format) {
+                case 'markdown':
+                    mimeType = 'text/markdown';
+                    fileExtension = 'md';
+                    break;
+                case 'plaintext':
+                    mimeType = 'text/plain';
+                    fileExtension = 'txt';
+                    exportContent = exportContent.replace(/<[^>]*>/g, ''); // Удаляем HTML теги
+                    break;
+                case 'html':
+                    mimeType = 'text/html';
+                    fileExtension = 'html';
+                    exportContent = `
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>${title}</title>
+                            <style>
+                                body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; }
+                                h1 { color: #333; }
+                                .metadata { color: #666; margin-bottom: 20px; }
+                            </style>
+                        </head>
+                        <body>
+                            <h1>${title}</h1>
+                            ${includeMetadata ? `<div class="metadata">
+                                <p><strong>Категория:</strong> ${category}</p>
+                                <p><strong>Теги:</strong> ${tags}</p>
+                            </div>` : ''}
+                            ${marked.parse(content)}
+                        </body>
+                        </html>
+                    `;
+                    break;
+            }
+            
+            // Создаем Blob и ссылку для скачивания
+            const blob = new Blob([exportContent], { type: `${mimeType};charset=utf-8;` });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'note'}.${fileExtension}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            // Закрываем модальное окно
+            const exportModal = bootstrap.Modal.getInstance(document.getElementById('exportModal'));
+            exportModal.hide();
+        }
+        
+        // Вспомогательная функция для генерации ID
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+    </script>
+</body>
+</html>

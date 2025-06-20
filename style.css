@@ -1,0 +1,204 @@
+:root {
+    --primary-color: #3498db;
+    --primary-dark: #2980b9;
+    --secondary-color: #2ecc71;
+    --danger-color: #e74c3c;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --text-color: #333;
+    --text-light: #6c757d;
+    --border-color: #dee2e6;
+    --bg-color: #ffffff;
+    --card-bg: #ffffff;
+    --input-bg: #ffffff;
+}
+
+[data-theme="dark"] {
+    --primary-color: #3a7bd5;
+    --primary-dark: #2c65b0;
+    --secondary-color: #00d2ff;
+    --danger-color: #ff416c;
+    --light-color: #343a40;
+    --dark-color: #f8f9fa;
+    --text-color: #f8f9fa;
+    --text-light: #adb5bd;
+    --border-color: #495057;
+    --bg-color: #212529;
+    --card-bg: #2c3034;
+    --input-bg: #2c3034;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+a:hover {
+    color: var(--primary-dark);
+}
+
+/* Auth page styles */
+.auth-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: none;
+    background-color: var(--card-bg);
+}
+
+.auth-card .nav-tabs .nav-link {
+    color: var(--text-light);
+    border: none;
+    padding: 12px 20px;
+    font-weight: 500;
+}
+
+.auth-card .nav-tabs .nav-link.active {
+    color: var(--primary-color);
+    background: none;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.logo {
+    max-height: 80px;
+}
+
+/* Notes page styles */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.note-card {
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background-color: var(--card-bg);
+}
+
+.note-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.note-card .card-body {
+    padding: 1.25rem;
+}
+
+.note-card .card-title {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--primary-color);
+}
+
+.note-card .card-text {
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.note-card .note-meta {
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.note-card .badge {
+    font-weight: 500;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+/* Edit note page styles */
+#editorContainer, #previewContainer {
+    min-height: 400px;
+}
+
+#notePreview {
+    line-height: 1.6;
+}
+
+#notePreview h1, #notePreview h2, #notePreview h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+#notePreview p {
+    margin-bottom: 1rem;
+}
+
+#notePreview ul, #notePreview ol {
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+}
+
+/* Markdown editor overrides */
+.EasyMDEContainer .CodeMirror {
+    background: var(--input-bg);
+    color: var(--text-color);
+    border: none;
+    min-height: 400px;
+}
+
+.EasyMDEContainer .CodeMirror-focused {
+    border: none;
+    box-shadow: none;
+}
+
+.EasyMDEContainer .editor-toolbar {
+    background: var(--card-bg);
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+    opacity: 1;
+}
+
+.EasyMDEContainer .editor-toolbar button {
+    color: var(--text-color) !important;
+}
+
+.EasyMDEContainer .editor-toolbar button:hover {
+    background: var(--primary-color);
+    color: white !important;
+    border-color: transparent !important;
+}
+
+.EasyMDEContainer .editor-toolbar button.active {
+    background: var(--primary-color);
+    color: white !important;
+    border-color: transparent !important;
+}
+
+/* Utility classes */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .auth-card {
+        margin-top: 20px;
+    }
+    
+    .navbar-collapse {
+        padding-top: 15px;
+    }
+    
+    #searchForm {
+        margin-bottom: 15px;
+    }
+}

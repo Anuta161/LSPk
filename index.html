@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заметки ЛСПК - Вход</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            background-image: url('file:///D:/флешка%20(аня)/И3Б/ПП/!!!!!!!!!!точно%20готовый%20продукт/1/ПАТТЕРН%20ДЛЯ%20ФОНА.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            color: #f8f9fa;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(18, 18, 18, 0.85);
+            z-index: -1;
+        }
+        
+        .logo {
+            max-width: 120px;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+        
+        /* Стили для светлой темы */
+        body.light-theme {
+            color: #212529;
+        }
+        
+        .light-theme::before {
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+        
+        /* Улучшенные стили для форм ввода */
+        .form-control, .form-select {
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border-width: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        /* Темная тема */
+        .form-control, .form-select {
+            background-color: #2d2d2d;
+            color: #ffffff !important;
+            border-color: #555;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background-color: #3a3a3a;
+            border-color: #4da6ff;
+            box-shadow: 0 0 0 0.25rem rgba(77, 166, 255, 0.25);
+            color: #ffffff !important;
+        }
+        
+        .form-label {
+            color: #ffffff !important;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control::placeholder {
+            color: #a0a0a0 !important;
+            opacity: 1;
+        }
+        
+        /* Светлая тема */
+        .light-theme .form-control,
+        .light-theme .form-select {
+            background-color: #ffffff;
+            color: #212529 !important;
+            border-color: #ced4da;
+        }
+        
+        .light-theme .form-control:focus,
+        .light-theme .form-select:focus {
+            background-color: #ffffff;
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+            color: #212529 !important;
+        }
+        
+        .light-theme .form-label {
+            color: #212529 !important;
+        }
+        
+        .light-theme .form-control::placeholder {
+            color: #6c757d !important;
+        }
+
+        /* Остальные стили */
+        .light-theme .card {
+            background-color: #ffffff;
+            border-color: #dee2e6;
+        }
+        
+        .light-theme .nav-tabs .nav-link.active {
+            background-color: #ffffff;
+            color: #212529;
+            border-color: #dee2e6 #dee2e6 #ffffff;
+        }
+        
+        .light-theme .nav-tabs .nav-link:not(.active) {
+            color: #6c757d;
+        }
+        
+        .light-theme a {
+            color: #0d6efd;
+        }
+        
+        .light-theme .text-muted {
+            color: #6c757d !important;
+        }
+
+        /* Общие стили для темной темы (по умололчанию) */
+        .card {
+            background-color: #1e1e1e;
+            border-color: #333;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            border-color: #444 #444 #2d2d2d;
+        }
+        
+        .nav-tabs .nav-link:not(.active) {
+            color: #adb5bd;
+        }
+        
+        a {
+            color: #4da6ff;
+        }
+        
+        .text-muted {
+            color: #adb5bd !important;
+        }
+        
+        /* Стили для карточки авторизации */
+        .auth-card {
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .light-theme .auth-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        header {
+            padding: 1.5rem 0;
+            background-color: rgba(18, 18, 18, 0.7);
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(5px);
+        }
+        
+        .light-theme header {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        
+        footer {
+            padding: 1rem 0;
+            background-color: rgba(18, 18, 18, 0.7);
+            border-radius: 10px;
+            margin-top: 2rem;
+            backdrop-filter: blur(5px);
+        }
+        
+        .light-theme footer {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Стили для баннера */
+        .banner-container {
+            width: 100%;
+            margin: 20px 0;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .banner {
+            width: 100%;
+            height: 180px;
+            position: relative;
+        }
+        
+        .banner-slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+        }
+        
+        .banner-slide.active {
+            opacity: 1;
+        }
+        
+        .banner-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        .light-theme .banner-caption {
+            background: rgba(255, 255, 255, 0.8);
+            color: #333;
+        }
+        
+        .banner-nav {
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .banner-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin: 0 4px;
+            border-radius: 50%;
+            background-color: #adb5bd;
+            cursor: pointer;
+        }
+        
+        .banner-dot.active {
+            background-color: #0d6efd;
+        }
+        
+        .light-theme .banner-dot {
+            background-color: #dee2e6;
+        }
+        
+        .light-theme .banner-dot.active {
+            background-color: #0d6efd;
+        }
+
+        /* Стили для кнопок навигации */
+        .nav-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-buttons .btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                max-width: 100px;
+            }
+            
+            .banner {
+                height: 150px;
+            }
+            
+            .banner-caption {
+                font-size: 0.9rem;
+                padding: 6px;
+            }
+            
+            .display-4 {
+                font-size: 2.2rem;
+            }
+            
+            .lead {
+                font-size: 1rem;
+            }
+            
+            .nav-buttons {
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <!-- Обновленная навигационная панель -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="file:///D:/флешка%20(аня)/И3Б/ПП/!!!!!!!!!!точно%20готовый%20продукт/1/ЛОГО.png" alt="Логотип ЛСПК" height="30" class="d-inline-block align-top me-2">
+                Заметки ЛСПК
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="notes.html">Мои заметки</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="edit-note.html">Новая заметка</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <button id="themeToggle" class="btn btn-sm btn-outline-light">
+                        <i class="bi bi-sun-fill"></i> <span id="themeText">Светлая тема</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="text-center mb-4">
+            <img src="file:///D:/флешка%20(аня)/И3Б/ПП/!!!!!!!!!!точно%20готовый%20продукт/1/ЛОГО.png" alt="Логотип ЛСПК" class="logo">
+            <h1 class="display-4">Заметки ЛСПК</h1>
+            <p class="lead">Удобное веб-приложение для студентов и преподавателей</p>
+        </header>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card auth-card">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs mb-4" id="authTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">Вход</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab">Регистрация</button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="authTabsContent">
+                            <div class="tab-pane fade show active" id="login" role="tabpanel">
+                                <form id="loginForm">
+                                    <div class="mb-3">
+                                        <label for="loginEmail" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="loginEmail" placeholder="Введите ваш email" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="loginPassword" class="form-label">Пароль</label>
+                                        <input type="password" class="form-control" id="loginPassword" placeholder="Введите пароль" required>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-primary">Войти</button>
+                                    </div>
+                                    <div class="text-center mt-3">
+                                        <a href="#" id="forgotPassword">Забыли пароль?</a>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="tab-pane fade" id="register" role="tabpanel">
+                                <form id="registerForm">
+                                    <div class="mb-3">
+                                        <label for="registerName" class="form-label">Имя</label>
+                                        <input type="text" class="form-control" id="registerName" placeholder="Ваше имя" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="registerEmail" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="registerEmail" placeholder="Введите email" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="registerPassword" class="form-label">Пароль</label>
+                                        <input type="password" class="form-control" id="registerPassword" placeholder="Не менее 6 символов" minlength="6" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="registerConfirmPassword" class="form-label">Подтвердите пароль</label>
+                                        <input type="password" class="form-control" id="registerConfirmPassword" placeholder="Повторите пароль" required>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-success">Зарегистрироваться</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Баннер с вашими изображениями -->
+        <div class="banner-container">
+            <div class="banner">
+                <div class="banner-slide active" data-link="notes.html" style="background-image: url('file:///D:/флешка%20(аня)/И3Б/ПП/!!!!!!!!!!точно%20готовый%20продукт/1/фото%20баннера%201.png');">
+                    <div class="banner-caption">УДОБНЫЕ ЗАМЕТКИ</div>
+                </div>
+                <div class="banner-slide" data-link="notes.html" style="background-image: url('file:///D:/флешка%20(аня)/И3Б/ПП/!!!!!!!!!!точно%20готовый%20продукт/1/фото%20баннера%202.png');">
+                    <div class="banner-caption">ЗАПИСУЙ САМОЕ ВАЖНОЕ</div>
+                </div>
+                <div class="banner-slide" data-link="notes.html" style="background-image: url('file:///D:/флешка%20(аня)/И3Б/ПП/!!!!!!!!!!точно%20готовый%20продукт/1/фото%20баннера%203.png');">
+                    <div class="banner-caption">ДОСТУПНО НА ВСЕХ УСТРОЙСТВАХ</div>
+                </div>
+            </div>
+            <div class="banner-nav">
+                <span class="banner-dot active" data-slide="0"></span>
+                <span class="banner-dot" data-slide="1"></span>
+                <span class="banner-dot" data-slide="2"></span>
+            </div>
+        </div>
+
+        <footer class="mt-3 text-center text-muted">
+            <p>Заметки ЛСПК &copy; 2025</p>
+            <div class="d-flex justify-content-center gap-2">
+                <a href="notes.html" class="btn btn-sm btn-outline-primary">К заметкам</a>
+                <button id="themeToggleFooter" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-sun-fill"></i> <span id="themeTextFooter">Светлая тема</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Кнопки навигации -->
+    <div class="nav-buttons">
+        <div class="btn-group" role="group">
+            <button class="btn btn-secondary" onclick="window.history.back()" title="Назад">
+                <i class="bi bi-arrow-left"></i>
+            </button>
+            <button class="btn btn-secondary" onclick="window.history.forward()" title="Вперед">
+                <i class="bi bi-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        // Функция для переключения темы
+        function toggleTheme() {
+            const body = document.body;
+            const themeText = document.getElementById('themeText');
+            const themeTextFooter = document.getElementById('themeTextFooter');
+            
+            body.classList.toggle('light-theme');
+            body.classList.toggle('dark-theme');
+            
+            if (body.classList.contains('light-theme')) {
+                themeText.textContent = 'Темная тема';
+                themeTextFooter.textContent = 'Темная тема';
+                document.querySelector('#themeToggle i').className = 'bi bi-moon-fill';
+                document.querySelector('#themeToggleFooter i').className = 'bi bi-moon-fill';
+                localStorage.setItem('theme', 'light');
+            } else {
+                themeText.textContent = 'Светлая тема';
+                themeTextFooter.textContent = 'Светлая тема';
+                document.querySelector('#themeToggle i').className = 'bi bi-sun-fill';
+                document.querySelector('#themeToggleFooter i').className = 'bi bi-sun-fill';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // Проверка сохраненной темы при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+                document.body.classList.remove('dark-theme');
+                document.getElementById('themeText').textContent = 'Темная тема';
+                document.getElementById('themeTextFooter').textContent = 'Темная тема';
+                document.querySelector('#themeToggle i').className = 'bi bi-moon-fill';
+                document.querySelector('#themeToggleFooter i').className = 'bi bi-moon-fill';
+            }
+            
+            // Обработчики клика для переключения темы
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            document.getElementById('themeToggleFooter').addEventListener('click', toggleTheme);
+            
+            // Логика для баннера
+            const slides = document.querySelectorAll('.banner-slide');
+            const dots = document.querySelectorAll('.banner-dot');
+            let currentSlide = 0;
+            const slideInterval = 3000; // 3 секунды
+            
+            // Функция для показа слайда
+            function showSlide(n) {
+                slides.forEach(slide => slide.classList.remove('active'));
+                dots.forEach(dot => dot.classList.remove('active'));
+                
+                currentSlide = (n + slides.length) % slides.length;
+                slides[currentSlide].classList.add('active');
+                dots[currentSlide].classList.add('active');
+            }
+            
+            // Автоматическое переключение слайдов
+            let slideTimer = setInterval(() => {
+                showSlide(currentSlide + 1);
+            }, slideInterval);
+            
+            // Обработчики для точек навигации
+            dots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    clearInterval(slideTimer);
+                    showSlide(parseInt(this.getAttribute('data-slide')));
+                    slideTimer = setInterval(() => {
+                        showSlide(currentSlide + 1);
+                    }, slideInterval);
+                });
+            });
+            
+            // Обработчики кликов по слайдам
+            slides.forEach(slide => {
+                slide.addEventListener('click', function() {
+                    const link = this.getAttribute('data-link');
+                    if (link) {
+                        window.location.href = link;
+                    }
+                });
+            });
+
+            // Обработчик формы входа
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                // Здесь должна быть проверка учетных данных
+                // Для демонстрации просто перенаправляем на страницу заметок
+                window.location.href = 'edit-note.html';
+            });
+
+            // Обработчик формы регистрации
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('registerName').value;
+                const email = document.getElementById('registerEmail').value;
+                const password = document.getElementById('registerPassword').value;
+                const confirmPassword = document.getElementById('registerConfirmPassword').value;
+                
+                if (password !== confirmPassword) {
+                    alert('Пароли не совпадают!');
+                    return;
+                }
+                
+                // Здесь должна быть регистрация пользователя
+                // Для демонстрации просто перенаправляем на страницу создания заметки
+                window.location.href = 'edit-note.html';
+            });
+        });
+    </script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+</body>
+</html>

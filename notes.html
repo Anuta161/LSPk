@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заметки ЛСПК - Мои заметки</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            background-image: url('file:///D:/флешка%20(аня)/И3Б/ПП/!!!!!!!!!!точно%20готовый%20продукт/1/ПАТТЕРН%20ДЛЯ%20ФОНА.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            color: #f8f9fa;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(18, 18, 18, 0.85);
+            z-index: -1;
+        }
+
+        /* Стили для светлой темы */
+        body.light-theme {
+            color: #212529;
+        }
+        
+        .light-theme::before {
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+        
+        /* Стили для 3D галереи (только визуальные) */
+        .gallery-section {
+            margin: 30px 0;
+            padding: 20px 0;
+            background-color: rgba(30, 30, 30, 0.7);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            text-align: center;
+        }
+        
+        .light-theme .gallery-section {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .gallery-container {
+            width: 100%;
+            height: 200px;
+            margin: 0 auto;
+            perspective: 1000px;
+            position: relative;
+        }
+        
+        .gallery-carousel {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateGallery 20s infinite linear;
+        }
+        
+        .gallery-item {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .gallery-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        @keyframes rotateGallery {
+            from { transform: translateZ(-250px) rotateY(0deg); }
+            to { transform: translateZ(-250px) rotateY(360deg); }
+        }
+
+        /* Стили для модального окна подтверждения удаления */
+        #confirmDeleteModal .modal-content {
+            color: #212529;
+            background-color: #fff;
+        }
+        
+        #confirmDeleteModal .modal-header,
+        #confirmDeleteModal .modal-body,
+        #confirmDeleteModal .modal-footer {
+            color: inherit;
+            border-color: #dee2e6;
+        }
+        
+        #confirmDeleteModal .btn-close {
+            filter: invert(0);
+        }
+
+        /* Стили для модального окна экспорта */
+        #exportModal .modal-content {
+            color: #212529;
+            background-color: #fff;
+        }
+        
+        #exportModal .modal-header,
+        #exportModal .modal-body,
+        #exportModal .modal-footer {
+            color: inherit;
+            border-color: #dee2e6;
+        }
+        
+        #exportModal .btn-close {
+            filter: invert(0);
+        }
+        
+        #exportModal .form-label,
+        #exportModal .form-check-label {
+            color: #212529 !important;
+        }
+
+        /* Стили для карточек заметок */
+        .note-card {
+            background-color: rgba(30, 30, 30, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .note-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        .light-theme .note-card {
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Стили для боковой панели */
+        .sidebar-card {
+            background-color: rgba(30, 30, 30, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .light-theme .sidebar-card {
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Стили для футера */
+        footer {
+            background-color: rgba(18, 18, 18, 0.7);
+            border-radius: 10px;
+            margin-top: 2rem;
+            backdrop-filter: blur(5px);
+        }
+        
+        .light-theme footer {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <!-- Навигационная панель -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="file:///D:/флешка%20(аня)/И3Б/ПП/!!!!!!!!!!точно%20готовый%20продукт/1/ЛОГО.png" alt="Логотип ЛСПК" height="30" class="d-inline-block align-top me-2">
+                Заметки ЛСПК
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="notes.html">Мои заметки</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="newNoteLink">Новая заметка</a>
+                    </li>
+                </ul>
+                <form class="d-flex me-3" id="searchForm">
+                    <input class="form-control me-2" type="search" placeholder="Поиск..." id="searchInput">
+                    <button class="btn btn-outline-light" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </form>
+                <div class="dropdown">
+                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle me-1"></i>
+                        <span id="userNameDisplay">Пользователь</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="profile.html" id="profileBtn">Профиль</a></li>
+                        <li><a class="dropdown-item" href="#" id="exportAllBtn">Экспорт всех заметок</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="logoutBtn">Выйти</a></li>
+                    </ul>
+                </div>
+                <button id="themeToggleNav" class="btn btn-sm btn-outline-light ms-2">
+                    <i class="bi bi-moon-fill"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="card sidebar-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Фильтры</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Категории</label>
+                            <select class="form-select" id="categoryFilter">
+                                <option value="all">Все категории</option>
+                                <option value="Учеба">Учеба</option>
+                                <option value="Личные">Личные</option>
+                                <option value="Работа">Работа</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Теги</label>
+                            <input type="text" class="form-control" id="tagsFilter" placeholder="Введите теги...">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Дата</label>
+                            <input type="date" class="form-control" id="dateFilter">
+                        </div>
+                        <button class="btn btn-primary w-100" id="applyFilters">Применить</button>
+                        <button class="btn btn-outline-secondary w-100 mt-2" id="resetFilters">Сбросить</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8 col-lg-9">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2>Мои заметки</h2>
+                    <button class="btn btn-success" id="addNoteBtn">
+                        <i class="bi bi-plus-lg me-1"></i> Новая заметка
+                    </button>
+                </div>
+
+                <div class="alert alert-info" id="noNotesAlert" style="display: none;">
+                    У вас пока нет заметок. Нажмите "Новая заметка", чтобы создать первую.
+                </div>
+
+                <div class="row" id="notesContainer">
+                    <!-- Заметки будут загружаться здесь динамически -->
+                </div>
+
+                <!-- 3D Галерея (теперь после заметок) -->
+                <div class="gallery-section">
+                    <h4 class="gallery-title">3D галерея</h4>
+                    <div class="gallery-container">
+                        <div class="gallery-carousel" id="galleryCarousel">
+                            <div class="gallery-item" style="transform: translate3d(0px, 0px, 250px) rotateY(0deg);">
+                                <img src="file:///D:/флешка%20(аня)/И3Б/ПП/!!!!!!!!!!точно%20готовый%20продукт/1/галерея%201.jpg" alt="Удобное ведение заметок">
+                            </div>
+                            <div class="gallery-item" style="transform: translate3d(216.506px, 0px, 125px) rotateY(72deg);">
+                                <img src="file:///D:/флешка%20(аня)/И3Б/ПП/!!!!!!!!!!точно%20готовый%20продукт/1/галерея%204.webp" alt="Организация учебного процесса">
+                            </div>
+                            <div class="gallery-item" style="transform: translate3d(216.506px, 0px, -125px) rotateY(144deg);">
+                                <img src="file:///D:/флешка%20(аня)/И3Б/ПП/!!!!!!!!!!точно%20готовый%20продукт/1/фото%20баннера%203.png" alt="Доступно на всех устройствах">
+                            </div>
+                            <div class="gallery-item" style="transform: translate3d(0px, 0px, -250px) rotateY(216deg);">
+                                <img src="file:///D:/флешка%20(аня)/И3Б/ПП/!!!!!!!!!!точно%20готовый%20продукт/1/фото%20баннера%202.png" alt="Удобное ведение заметок">
+                            </div>
+                            <div class="gallery-item" style="transform: translate3d(-216.506px, 0px, -125px) rotateY(288deg);">
+                                <img src="file:///D:/флешка%20(аня)/И3Б/ПП/!!!!!!!!!!точно%20готовый%20продукт/1/ЛОГО.png" alt="Организация учебного процесса">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-5 py-3">
+        <div class="container text-center text-muted">
+            <p class="mb-0">Заметки ЛСПК &copy; 2025 | Версия 1.0.0</p>
+        </div>
+    </footer>
+
+    <!-- Модальное окно подтверждения удаления -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Подтверждение удаления</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Вы уверены, что хотите удалить эту заметку? Это действие нельзя отменить.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно экспорта -->
+    <div class="modal fade" id="exportModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Экспорт всех заметок</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Формат</label>
+                        <select class="form-select" id="exportFormat">
+                            <option value="json">JSON (полные данные)</option>
+                            <option value="markdown">Markdown (.md)</option>
+                            <option value="html">HTML</option>
+                            <option value="plaintext">Текст (.txt)</option>
+                        </select>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="includeMetadata" checked>
+                        <label class="form-check-label" for="includeMetadata">Включить метаданные (заголовок, категория, теги)</label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="groupByCategory" checked>
+                        <label class="form-check-label" for="groupByCategory">Группировать по категориям</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" id="confirmExportBtn">Экспорт</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        // Функция для переключения темы
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggleNav');
+            
+            body.classList.toggle('light-theme');
+            body.classList.toggle('dark-theme');
+            
+            if (body.classList.contains('light-theme')) {
+                themeToggle.innerHTML = '<i class="bi bi-moon-fill"></i>';
+                localStorage.setItem('theme', 'light');
+            } else {
+                themeToggle.innerHTML = '<i class="bi bi-sun-fill"></i>';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // Проверка сохраненной темы при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeToggle = document.getElementById('themeToggleNav');
+            
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+                document.body.classList.remove('dark-theme');
+                themeToggle.innerHTML = '<i class="bi bi-moon-fill"></i>';
+            } else {
+                themeToggle.innerHTML = '<i class="bi bi-sun-fill"></i>';
+            }
+            
+            // Обработчик клика для переключения темы
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Загрузка заметок при открытии страницы
+            loadNotes();
+            
+            // Обработчик кнопки "Новая заметка"
+            document.getElementById('addNoteBtn').addEventListener('click', function() {
+                window.location.href = 'edit-note.html';
+            });
+            
+            // Обработчик ссылки "Новая заметка" в навигации
+            document.getElementById('newNoteLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'edit-note.html';
+            });
+            
+            // Обработчик поиска
+            document.getElementById('searchForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                filterNotes(searchTerm);
+            });
+            
+            // Обработчик фильтров
+            document.getElementById('applyFilters').addEventListener('click', function() {
+                const category = document.getElementById('categoryFilter').value;
+                const tags = document.getElementById('tagsFilter').value.toLowerCase();
+                const date = document.getElementById('dateFilter').value;
+                
+                filterNotes('', category, tags, date);
+            });
+            
+            // Обработчик сброса фильтров
+            document.getElementById('resetFilters').addEventListener('click', function() {
+                document.getElementById('categoryFilter').value = 'all';
+                document.getElementById('tagsFilter').value = '';
+                document.getElementById('dateFilter').value = '';
+                loadNotes();
+            });
+            
+            // Инициализация модального окна удаления
+            const deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            let noteToDelete = null;
+            
+            // Обработчик подтверждения удаления
+            document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+                if (noteToDelete) {
+                    deleteNote(noteToDelete);
+                    deleteModal.hide();
+                }
+            });
+            
+            // Обработчик кнопки экспорта всех заметок
+            document.getElementById('exportAllBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                const exportModal = new bootstrap.Modal(document.getElementById('exportModal'));
+                exportModal.show();
+            });
+            
+            // Обработчик подтверждения экспорта
+            document.getElementById('confirmExportBtn').addEventListener('click', function() {
+                exportAllNotes();
+                const exportModal = bootstrap.Modal.getInstance(document.getElementById('exportModal'));
+                exportModal.hide();
+            });
+            
+            // Обработчик кнопки выхода
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                logout();
+            });
+            
+            // Загрузка имени пользователя
+            loadUserProfile();
+        });
+        
+        // Функция загрузки профиля пользователя
+        function loadUserProfile() {
+            const user = JSON.parse(localStorage.getItem('currentUser')) || { name: 'Пользователь' };
+            document.getElementById('userNameDisplay').textContent = user.name;
+        }
+        
+        // Функция загрузки заметок
+        function loadNotes() {
+            const notes = JSON.parse(localStorage.getItem('notes')) || [];
+            const notesContainer = document.getElementById('notesContainer');
+            const noNotesAlert = document.getElementById('noNotesAlert');
+            
+            notesContainer.innerHTML = '';
+            
+            if (notes.length === 0) {
+                noNotesAlert.style.display = 'block';
+                return;
+            }
+            
+            noNotesAlert.style.display = 'none';
+            
+            // Сортируем заметки по дате обновления (новые сначала)
+            notes.sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt));
+            
+            notes.forEach(note => {
+                const noteElement = createNoteCard(note);
+                notesContainer.appendChild(noteElement);
+            });
+        }
+        
+        // Функция создания карточки заметки
+        function createNoteCard(note) {
+            const col = document.createElement('div');
+            col.className = 'col-md-6 col-lg-4 mb-4';
+            
+            const card = document.createElement('div');
+            card.className = 'card note-card h-100';
+            
+            const cardBody = document.createElement('div');
+            cardBody.className = 'card-body';
+            
+            const title = document.createElement('h5');
+            title.className = 'card-title';
+            title.textContent = note.title || 'Без названия';
+            
+            const category = document.createElement('span');
+            category.className = 'badge bg-primary mb-2';
+            category.textContent = note.category || 'Без категории';
+            
+            const contentPreview = document.createElement('div');
+            contentPreview.className = 'card-text text-muted mb-2';
+            // Обрезаем текст для превью
+            const previewText = note.content.replace(/[#*_`~]/g, '').substring(0, 100);
+            contentPreview.textContent = previewText + (note.content.length > 100 ? '...' : '');
+            
+            const tagsContainer = document.createElement('div');
+            tagsContainer.className = 'mb-2';
+            
+            if (note.tags && note.tags.length > 0) {
+                note.tags.forEach(tag => {
+                    const tagElement = document.createElement('span');
+                    tagElement.className = 'badge bg-secondary me-1 mb-1';
+                    tagElement.textContent = tag;
+                    tagsContainer.appendChild(tagElement);
+                });
+            }
+            
+            const date = document.createElement('small');
+            date.className = 'text-muted d-block mb-3';
+            const updatedAt = note.updatedAt || note.createdAt;
+            date.textContent = new Date(updatedAt).toLocaleString();
+            
+            const editBtn = document.createElement('a');
+            editBtn.className = 'btn btn-sm btn-outline-primary me-2';
+            editBtn.innerHTML = '<i class="bi bi-pencil"></i> Редактировать';
+            editBtn.href = `edit-note.html?id=${note.id}`;
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'btn btn-sm btn-outline-danger';
+            deleteBtn.innerHTML = '<i class="bi bi-trash"></i> Удалить';
+            deleteBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                noteToDelete = note.id;
+                const deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+                deleteModal.show();
+            });
+            
+            cardBody.appendChild(title);
+            cardBody.appendChild(category);
+            cardBody.appendChild(contentPreview);
+            cardBody.appendChild(tagsContainer);
+            cardBody.appendChild(date);
+            cardBody.appendChild(editBtn);
+            cardBody.appendChild(deleteBtn);
+            
+            card.appendChild(cardBody);
+            col.appendChild(card);
+            
+            return col;
+        }
+        
+        // Функция фильтрации заметок
+        function filterNotes(searchTerm = '', category = 'all', tags = '', date = '') {
+            const notes = JSON.parse(localStorage.getItem('notes')) || [];
+            const notesContainer = document.getElementById('notesContainer');
+            
+            notesContainer.innerHTML = '';
+            
+            const filteredNotes = notes.filter(note => {
+                // Фильтрация по поисковому запросу
+                const matchesSearch = searchTerm === '' || 
+                    (note.title && note.title.toLowerCase().includes(searchTerm)) || 
+                    (note.content && note.content.toLowerCase().includes(searchTerm));
+                
+                // Фильтрация по категории
+                const matchesCategory = category === 'all' || note.category === category;
+                
+                // Фильтрация по тегам
+                let matchesTags = true;
+                if (tags) {
+                    const tagList = tags.split(',').map(t => t.trim());
+                    matchesTags = note.tags && tagList.every(tag => 
+                        note.tags.some(noteTag => noteTag.toLowerCase().includes(tag))
+                    );
+                }
+                
+                // Фильтрация по дате
+                let matchesDate = true;
+                if (date) {
+                    const noteDate = new Date(note.updatedAt || note.createdAt).toISOString().split('T')[0];
+                    matchesDate = noteDate === date;
+                }
+                
+                return matchesSearch && matchesCategory && matchesTags && matchesDate;
+            });
+            
+            if (filteredNotes.length === 0) {
+                document.getElementById('noNotesAlert').style.display = 'block';
+                document.getElementById('noNotesAlert').textContent = 'Заметки не найдены. Попробуйте изменить параметры поиска.';
+                return;
+            }
+            
+            document.getElementById('noNotesAlert').style.display = 'none';
+            
+            filteredNotes.forEach(note => {
+                const noteElement = createNoteCard(note);
+                notesContainer.appendChild(noteElement);
+            });
+        }
+        
+        // Функция удаления заметки
+        function deleteNote(noteId) {
+            const notes = JSON.parse(localStorage.getItem('notes')) || [];
+            const updatedNotes = notes.filter(note => note.id !== noteId);
+            localStorage.setItem('notes', JSON.stringify(updatedNotes));
+            loadNotes();
+        }
+        
+        // Функция экспорта всех заметок
+        function exportAllNotes() {
+            const notes = JSON.parse(localStorage.getItem('notes')) || [];
+            if (notes.length === 0) {
+                alert('Нет заметок для экспорта!');
+                return;
+            }
+            
+            const format = document.getElementById('exportFormat').value;
+            const includeMetadata = document.getElementById('includeMetadata').checked;
+            const groupByCategory = document.getElementById('groupByCategory').checked;
+            
+            let exportContent = '';
+            let fileName = 'notes_export';
+            
+            switch (format) {
+                case 'json':
+                    exportContent = JSON.stringify(notes, null, 2);
+                    fileName += '.json';
+                    downloadFile(exportContent, fileName, 'application/json');
+                    break;
+                    
+                case 'markdown':
+                    notes.forEach(note => {
+                        if (includeMetadata) {
+                            exportContent += `# ${note.title || 'Без названия'}\n\n`;
+                            exportContent += `**Категория:** ${note.category || 'Без категории'}\n`;
+                            exportContent += `**Теги:** ${note.tags ? note.tags.join(', ') : 'Нет тегов'}\n`;
+                            exportContent += `**Дата создания:** ${new Date(note.createdAt).toLocaleString()}\n`;
+                            if (note.updatedAt) {
+                                exportContent += `**Последнее обновление:** ${new Date(note.updatedAt).toLocaleString()}\n`;
+                            }
+                            exportContent += '\n';
+                        }
+                        exportContent += note.content + '\n\n---\n\n';
+                    });
+                    fileName += '.md';
+                    downloadFile(exportContent, fileName, 'text/markdown');
+                    break;
+                    
+                case 'html':
+                    exportContent = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Экспорт заметок</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; }
+        h1 { color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .note { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+        .metadata { color: #7f8c8d; margin-bottom: 15px; font-size: 0.9em; }
+        .content { margin-top: 15px; }
+        .tag { display: inline-block; background: #eee; padding: 2px 8px; border-radius: 3px; margin-right: 5px; font-size: 0.8em; }
+    </style>
+</head>
+<body>
+    <h1>Экспорт заметок</h1>
+    <p>Всего заметок: ${notes.length}</p>
+`;
+                    
+                    notes.forEach(note => {
+                        exportContent += `
+    <div class="note">
+        <h2>${note.title || 'Без названия'}</h2>
+                        `;
+                        
+                        if (includeMetadata) {
+                            exportContent += `
+        <div class="metadata">
+            <p><strong>Категория:</strong> ${note.category || 'Без категории'}</p>
+                            `;
+                            
+                            if (note.tags && note.tags.length > 0) {
+                                exportContent += `
+            <p><strong>Теги:</strong> 
+                                `;
+                                note.tags.forEach(tag => {
+                                    exportContent += `<span class="tag">${tag}</span> `;
+                                });
+                                exportContent += `
+            </p>
+                                `;
+                            }
+                            
+                            exportContent += `
+            <p><strong>Дата создания:</strong> ${new Date(note.createdAt).toLocaleString()}</p>
+                            `;
+                            
+                            if (note.updatedAt) {
+                                exportContent += `
+            <p><strong>Последнее обновление:</strong> ${new Date(note.updatedAt).toLocaleString()}</p>
+                                `;
+                            }
+                            
+                            exportContent += `
+        </div>
+                            `;
+                        }
+                        
+                        exportContent += `
+        <div class="content">
+            ${marked.parse(note.content || '')}
+        </div>
+    </div>
+                        `;
+                    });
+                    
+                    exportContent += `
+</body>
+</html>
+                    `;
+                    
+                    fileName += '.html';
+                    downloadFile(exportContent, fileName, 'text/html');
+                    break;
+                    
+                case 'plaintext':
+                    notes.forEach(note => {
+                        if (includeMetadata) {
+                            exportContent += `Заголовок: ${note.title || 'Без названия'}\n`;
+                            exportContent += `Категория: ${note.category || 'Без категории'}\n`;
+                            exportContent += `Теги: ${note.tags ? note.tags.join(', ') : 'Нет тегов'}\n`;
+                            exportContent += `Дата создания: ${new Date(note.createdAt).toLocaleString()}\n`;
+                            if (note.updatedAt) {
+                                exportContent += `Последнее обновление: ${new Date(note.updatedAt).toLocaleString()}\n`;
+                            }
+                            exportContent += '\n';
+                        }
+                        exportContent += note.content.replace(/<[^>]*>/g, '') + '\n\n---\n\n';
+                    });
+                    fileName += '.txt';
+                    downloadFile(exportContent, fileName, 'text/plain');
+                    break;
+            }
+            
+            alert('Экспорт завершен! Файл скачивается автоматически.');
+        }
+        
+        // Функция для скачивания файла
+        function downloadFile(content, fileName, contentType) {
+            const blob = new Blob([content], { type: contentType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // Функция выхода из профиля
+        function logout() {
+            if (confirm('Вы уверены, что хотите выйти из профиля?')) {
+                // Очищаем данные текущего пользователя
+                localStorage.removeItem('currentUser');
+                // Перенаправляем на страницу входа
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>
